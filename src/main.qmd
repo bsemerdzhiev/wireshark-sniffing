@@ -1,14 +1,43 @@
 ```{python}
-import nest_asyncio
-nest_asyncio.apply()
-import pyshark
+#Imports 
 import pandas as pd
+import matplotlib.pyplot as plt
 
-cap = pyshark.FileCapture("data/capture2.pcapng", use_json=True)
+'''
+Capture_1 - Mostly video streaming(e.g. Netflix)
+Capture_2 - YouTube and Spotify
+Capture_3 - YouTube
+'''
 
-for pkt in cap:
-  try:
-    print(pkt)
-  except AttributeError:
-    pass
+df = pd.read_csv("data/wifi_dataset_2.csv", index_col=False)
+
+# calcualte % of AP->Device and Device->AP
+df_data = df[df["wlan.fc.type"] == 2.0]
+
+ap_device = df_data[df_data["wlan.bssid"] == df_data["wlan.ta"]]
+
+device_ap = df_data[df_data["wlan.bssid"] == df_data["wlan.ra"]]
+
+total: int = df_data.shape[0]
+ap_device_cnt: int = ap_device.shape[0]
+device_ap_cnt: int = device_ap.shape[0]
+
+print(ap_device_cnt / total * 100)
+print(device_ap_cnt / total * 100)
+
+# Display statistics of frames 
+
+types = df["wlan.fc.type"].value_counts(normalize=True)
+
+types.plot(kind="bar", stacked=True)
+
+subtypes = df["wlan.fc.subtype"].value_counts(normalize=True)
+
+subtypes.plot(kind="bar", stacked=True)
+
+plt.show()
+
+
+# Information on QoS parameters
+
 ```
