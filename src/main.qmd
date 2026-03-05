@@ -1,0 +1,14 @@
+```{python}
+import nest_asyncio
+nest_asyncio.apply()
+import pyshark
+import pandas as pd
+
+cap = pyshark.FileCapture("data/capture2.pcapng", use_json=True)
+
+for pkt in cap:
+  try:
+    print(pkt)
+  except AttributeError:
+    pass
+```
