@@ -1,4 +1,6 @@
 ```{python}
+#| output: true
+#| echo: false
 #Imports 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,8 +11,9 @@ Capture_2 - YouTube and Spotify
 Capture_3 - YouTube
 '''
 
-df = pd.read_csv("data/wifi_dataset_2.csv", index_col=False)
+df = pd.read_csv("../data/wifi_dataset_3.csv", index_col=False)
 
+print(df)
 # calcualte % of AP->Device and Device->AP
 df_data = df[df["wlan.fc.type"] == 2.0]
 
@@ -26,18 +29,28 @@ print(ap_device_cnt / total * 100)
 print(device_ap_cnt / total * 100)
 
 # Display statistics of frames 
-
+# display the types
 types = df["wlan.fc.type"].value_counts(normalize=True)
 
 types.plot(kind="bar", stacked=True)
 
+plt.show()
+# plot the subtypes
 subtypes = df["wlan.fc.subtype"].value_counts(normalize=True)
 
 subtypes.plot(kind="bar", stacked=True)
 
 plt.show()
-
-
 # Information on QoS parameters
 
+qos_fields = ["wlan.qos.tid", "wlan.qos.priority", "wlan.qos.eosp", "wlan.qos.ack" , "wlan.qos.amsdupresent"]
+# wlan.qos.queue_size is crashing the program for some reason, TODO: fix later
+# qos_fields = ["wlan.qos.tid", "wlan.qos.priority", "wlan.qos.eosp", "wlan.qos.ack" , "wlan.qos.amsdupresent", "wlan.qos.queue_size"]
+
+# display priorities
+for i in qos_fields:
+  qos_tid = df[i].value_counts(normalize=True)
+  qos_tid.plot(kind="bar", stacked=True)
+
+  plt.show()
 ```

@@ -1,1 +1,5 @@
 .venv/*
+src/main.quarto_ipynb_*
+src/main.quarto_ipynb
+src/main_files/
+src/main.html
